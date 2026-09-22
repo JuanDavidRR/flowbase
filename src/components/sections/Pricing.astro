@@ -1,0 +1,76 @@
+---
+import { Check } from 'lucide-react';
+import { Card, CardHeader, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import Container from '@/components/site/Container.astro';
+import BillingToggle from '@/components/islands/BillingToggle.tsx';
+import { plans } from '@/data/site';
+---
+
+<section
+	id="pricing"
+	data-billing-period="monthly"
+	aria-labelledby="pricing-heading"
+	class="border-b border-border/60 py-20 sm:py-24"
+>
+	<Container class="flex flex-col items-center gap-4 text-center">
+		<h2 data-reveal id="pricing-heading" class="text-balance font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+			<span class="text-indigo-600">Simple pricing</span> that scales with your bookings
+		</h2>
+		<p data-reveal class="max-w-xl text-pretty text-gray-600 ">
+			Every plan includes payment collection on every booking. Switch or cancel anytime.
+		</p>
+
+		<div data-reveal class="mt-4">
+			<BillingToggle client:visible={{ rootMargin: '200px' }} />
+		</div>
+
+		<ul class="mt-8 grid w-full gap-6 text-left md:grid-cols-3">
+			{
+				plans.map((plan) => (
+					<li data-reveal class="flex">
+						<Card className={`flex w-full flex-col ${plan.highlighted ? 'ring-2 ring-primary' : ''}`}>
+							<CardHeader>
+								{plan.highlighted && <Badge className="w-fit">Most popular</Badge>}
+								<h3 class="font-heading text-base leading-snug font-medium">{plan.name}</h3>
+								<CardDescription>{plan.description}</CardDescription>
+							</CardHeader>
+							<CardContent className="flex flex-1 flex-col gap-6">
+								<p class="flex items-baseline gap-1">
+									<span data-price="monthly" class="text-3xl font-semibold tracking-tight text-foreground">
+										${plan.monthly}
+									</span>
+									<span data-price="annual" class="text-3xl font-semibold tracking-tight text-foreground">
+										${plan.annual}
+									</span>
+									<span class="text-sm text-gray-600 ">/mo</span>
+								</p>
+								<ul class="flex flex-1 flex-col gap-2.5 text-sm text-gray-600 ">
+									{plan.features.map((feature) => (
+										<li class="flex items-start gap-2">
+											<Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-primary" />
+											{feature}
+										</li>
+									))}
+								</ul>
+							</CardContent>
+							<CardFooter>
+								<Button
+									className="w-full"
+									variant={plan.highlighted ? 'default' : 'outline'}
+									data-event="select_plan"
+									data-plan-name={plan.name}
+								>
+									Select plan
+								</Button>
+							</CardFooter>
+						</Card>
+					</li>
+				))
+			}
+		</ul>
+
+		<p class="text-xs text-gray-600 ">Annual billing shows the equivalent monthly price, billed yearly.</p>
+	</Container>
+</section>

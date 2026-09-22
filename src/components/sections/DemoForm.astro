@@ -1,0 +1,62 @@
+---
+import { Mail, MapPin, Phone } from 'lucide-react';
+import Container from '@/components/site/Container.astro';
+import LinkedinIcon from '@/components/site/LinkedinIcon.astro';
+import DemoRequestForm from '@/components/islands/DemoRequestForm.tsx';
+import { contact } from '@/data/site';
+
+const contactItems = [
+	{ label: 'Email', text: contact.email, href: `mailto:${contact.email}`, Icon: Mail },
+	{ label: 'Phone', text: contact.phone, href: contact.phoneHref, Icon: Phone },
+	{ label: 'LinkedIn', text: contact.linkedinLabel, href: contact.linkedinUrl, Icon: LinkedinIcon, external: true },
+	{ label: 'Office', text: contact.address, Icon: MapPin },
+];
+---
+
+<section id="demo-request" aria-labelledby="demo-request-heading" class="py-20 sm:py-24">
+	<Container class="grid gap-10 md:grid-cols-2 md:items-center">
+		<div data-reveal class="flex flex-col gap-4">
+			<h2 id="demo-request-heading" class="text-balance font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+				See <span class="text-indigo-600">Flowbase</span> with your own bookings
+			</h2>
+			<p class="text-pretty text-gray-600 ">
+				Tell us a bit about your business and we'll walk you through setting up your first paid
+				booking link.
+			</p>
+
+			<ul class="mt-4 flex flex-col gap-4 text-sm">
+				{
+					contactItems.map(({ label, text, href, Icon, external }) => (
+						<li class="flex items-center gap-3">
+							<span
+								aria-hidden="true"
+								class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-muted text-foreground"
+							>
+								<Icon className="h-4 w-4" />
+							</span>
+							<span class="flex flex-col">
+								<span class="text-xs text-gray-600 ">{label}</span>
+								{href ? (
+									<a
+										href={href}
+										target={external ? '_blank' : undefined}
+										rel={external ? 'noopener noreferrer' : undefined}
+										class="rounded-sm font-medium text-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+									>
+										{text}
+									</a>
+								) : (
+									<span class="font-medium text-foreground">{text}</span>
+								)}
+							</span>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+
+		<div data-reveal class="w-full">
+			<DemoRequestForm client:visible={{ rootMargin: '200px' }} />
+		</div>
+	</Container>
+</section>

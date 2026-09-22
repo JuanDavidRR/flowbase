@@ -1,0 +1,20 @@
+---
+import Container from '@/components/site/Container.astro';
+import FeaturesAccordion from '@/components/islands/FeaturesAccordion.tsx';
+import { features } from '@/data/site';
+---
+
+<section id="faq" aria-labelledby="features-heading" class="border-b border-border/60 py-20 sm:py-24">
+	<Container class="flex flex-col items-center gap-4 text-center">
+		<h2 data-reveal id="features-heading" class="text-balance font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+			Everything a booked call needs, <span class="text-indigo-600">built in</span>
+		</h2>
+		<p data-reveal class="max-w-xl text-pretty text-gray-600 ">
+			Select a feature to see how it fits into the way you already work.
+		</p>
+
+		<div data-reveal class="mt-8 w-full max-w-2xl text-left">
+			<FeaturesAccordion client:visible={{ rootMargin: '200px' }} features={features} />
+		</div>
+	</Container>
+</section>

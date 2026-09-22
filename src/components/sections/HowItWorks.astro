@@ -1,0 +1,21 @@
+---
+import Container from '@/components/site/Container.astro';
+import HowItWorksTabs from '@/components/islands/HowItWorksTabs.tsx';
+import { journey } from '@/data/site';
+---
+
+<section id="how-it-works" aria-labelledby="how-it-works-heading" class="border-b border-border/60 py-20 sm:py-24">
+	<Container class="flex flex-col items-center gap-4 text-center">
+		<h2 data-reveal id="how-it-works-heading" class="text-balance font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+			From shared link to <span class="text-indigo-600">money in the bank</span>
+		</h2>
+		<p data-reveal class="max-w-xl text-pretty text-gray-600 ">
+			The same Flowbase link carries a client through the whole booking &mdash; here's what happens
+			at each step, start to finish.
+		</p>
+
+		<div data-reveal class="mt-8 w-full max-w-4xl text-left">
+			<HowItWorksTabs client:visible={{ rootMargin: '200px' }} steps={journey} />
+		</div>
+	</Container>
+</section>

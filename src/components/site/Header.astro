@@ -1,0 +1,92 @@
+---
+import { Button } from "@/components/ui/button";
+import { site } from "@/data/site";
+
+const navLinks = [
+  { href: "#how-it-works", label: "How it works" },
+  { href: "#pricing", label: "Pricing" },
+  { href: "#faq", label: "FAQ" },
+  { href: "#demo-request", label: "Request a demo" },
+];
+
+const navLinkClass =
+  "rounded-sm text-gray-600  transition-colors hover:text-foreground focus-visible:text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring";
+---
+
+<header
+  class="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur"
+>
+  <div
+    class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8"
+  >
+    <a
+      href="/"
+      class="flex items-center gap-2 rounded-sm font-heading text-base font-semibold text-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+    >
+      <span
+        aria-hidden="true"
+        class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground"
+      >
+        F
+      </span>
+      {site.name}
+    </a>
+
+    <nav aria-label="Primary" class="hidden md:block">
+      <ul class="flex items-center gap-6 text-sm font-medium">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a href={link.href} class={navLinkClass}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="hidden md:block">
+      <a href="#demo-request" class="cursor-pointer">
+        <Button data-event="cta_click" data-cta-type="header"
+          >Start free trial</Button
+        >
+      </a>
+    </div>
+
+    <details class="md:hidden">
+      <summary
+        class="flex list-none items-center gap-2 rounded-lg border border-input px-2.5 py-1.5 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden"
+      >
+        <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" class="size-4">
+          <path
+            d="M3 5h14M3 10h14M3 15h14"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"></path>
+        </svg>
+        Menu
+      </summary>
+      <div
+        class="absolute inset-x-0 top-full border-b border-border bg-background p-4 shadow-md"
+      >
+        <ul class="flex flex-col gap-3 text-sm font-medium">
+          {
+            navLinks.map((link) => (
+              <li>
+                <a href={link.href} class={navLinkClass}>
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <Button
+          className="mt-4 w-full"
+          data-event="cta_click"
+          data-cta-type="header">Start free trial</Button
+        >
+      </div>
+    </details>
+  </div>
+</header>
