@@ -144,6 +144,9 @@ const softwareSchema = {
             params[key] = target.dataset[key]!;
         }
 
+        // agrega lo que necesites directamente aquí
+        params.label = target.textContent?.trim() ?? "";
+
         window.dataLayer.push({ event: target.dataset.event, ...params });
       });
     </script>
