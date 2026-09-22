@@ -56,14 +56,11 @@ import { plans } from '@/data/site';
 								</ul>
 							</CardContent>
 							<CardFooter>
-								<Button
-									className="w-full"
-									variant={plan.highlighted ? 'default' : 'outline'}
-									data-event="select_plan"
-									data-plan-name={plan.name}
-								>
-									Select plan
-								</Button>
+								<a href="#demo-request" class="w-full" data-select-plan data-event="select_plan" data-plan-name={plan.name}>
+									<Button className="w-full cursor-pointer" variant={plan.highlighted ? 'default' : 'outline'}>
+										Select plan
+									</Button>
+								</a>
 							</CardFooter>
 						</Card>
 					</li>
@@ -74,3 +71,17 @@ import { plans } from '@/data/site';
 		<p class="text-xs text-gray-600 ">Annual billing shows the equivalent monthly price, billed yearly.</p>
 	</Container>
 </section>
+
+<script>
+	// Hands the chosen plan off to the demo form: sessionStorage covers the
+	// form island mounting later (client:visible), the custom event covers it
+	// already being mounted (e.g. user picks a different plan on a long page).
+	document.querySelectorAll<HTMLElement>('[data-select-plan]').forEach((link) => {
+		link.addEventListener('click', () => {
+			const planName = link.dataset.planName;
+			if (!planName) return;
+			sessionStorage.setItem('flowbase:selectedPlan', planName);
+			window.dispatchEvent(new CustomEvent('flowbase:plan-selected', { detail: { planName } }));
+		});
+	});
+</script>
