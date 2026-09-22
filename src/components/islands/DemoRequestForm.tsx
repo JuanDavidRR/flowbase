@@ -107,6 +107,7 @@ export default function DemoRequestForm() {
 	return (
 		<form
 			noValidate
+			id={formId}
 			onFocusCapture={handleFormFocus}
 			onSubmit={handleSubmit}
 			className="flex flex-col gap-5 rounded-xl border border-border bg-card p-6 sm:p-8"
