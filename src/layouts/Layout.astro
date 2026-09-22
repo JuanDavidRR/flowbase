@@ -1,8 +1,8 @@
 ---
-import '@/styles/global.css';
-import Header from '@/components/site/Header.astro';
-import Footer from '@/components/site/Footer.astro';
-import { site } from '@/data/site';
+import "@/styles/global.css";
+import Header from "@/components/site/Header.astro";
+import Footer from "@/components/site/Footer.astro";
+import { site } from "@/data/site";
 
 interface Props {
   title: string;
@@ -11,133 +11,168 @@ interface Props {
 
 const { title, description } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const ogImageURL = new URL('/og-image.svg', Astro.site);
+const ogImageURL = new URL("/og-image.svg", Astro.site);
 
 const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
+  "@context": "https://schema.org",
+  "@type": "Organization",
   name: site.name,
   url: site.url,
   description: site.description,
 };
 
 const softwareSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
   name: site.name,
-  applicationCategory: 'BusinessApplication',
-  operatingSystem: 'Web',
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
   description: site.description,
   offers: [
-    { '@type': 'Offer', name: 'Starter', price: '19', priceCurrency: 'USD' },
-    { '@type': 'Offer', name: 'Pro', price: '39', priceCurrency: 'USD' },
-    { '@type': 'Offer', name: 'Business', price: '79', priceCurrency: 'USD' },
+    { "@type": "Offer", name: "Starter", price: "19", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Pro", price: "39", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Business", price: "79", priceCurrency: "USD" },
   ],
 };
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<link rel="canonical" href={canonicalURL} />
-		<meta name="generator" content={Astro.generator} />
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-5GWNPPMP");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="canonical" href={canonicalURL} />
+    <meta name="generator" content={Astro.generator} />
 
-		<title>{title}</title>
-		<meta name="description" content={description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
 
-		<meta property="og:type" content="website" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
-		<meta property="og:url" content={canonicalURL} />
-		<meta property="og:site_name" content={site.name} />
-		<meta property="og:image" content={ogImageURL} />
-		<meta property="og:image:type" content="image/svg+xml" />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
 
-		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
-		<script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
-	</head>
-	<body>
-		<a
-			href="#main-content"
-			class="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-2 focus-visible:left-2 focus-visible:z-50 focus-visible:rounded-lg focus-visible:bg-primary focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-medium focus-visible:text-primary-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
-		>
-			Skip to main content
-		</a>
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(organizationSchema)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(softwareSchema)}
+    />
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5GWNPPMP"
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"></iframe></noscript
+    >
+    <!-- End Google Tag Manager (noscript) -->
+    <a
+      href="#main-content"
+      class="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-2 focus-visible:left-2 focus-visible:z-50 focus-visible:rounded-lg focus-visible:bg-primary focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-medium focus-visible:text-primary-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+    >
+      Skip to main content
+    </a>
 
-		<Header />
+    <Header />
 
-		<main id="main-content">
-			<slot />
-		</main>
+    <main id="main-content">
+      <slot />
+    </main>
 
-		<Footer />
+    <Footer />
 
-		<script>
-			// GTM/GA4 testbed: a single delegated click listener reads any
-			// `data-event` (+ other `data-*`) attributes off the clicked element
-			// and pushes them to the dataLayer, so most interactions on this page
-			// need no bespoke tracking code, just the right markup.
-			window.dataLayer = window.dataLayer || [];
+    <script>
+      // GTM/GA4 testbed: a single delegated click listener reads any
+      // `data-event` (+ other `data-*`) attributes off the clicked element
+      // and pushes them to the dataLayer, so most interactions on this page
+      // need no bespoke tracking code, just the right markup.
+      window.dataLayer = window.dataLayer || [];
 
-			// Only these keys are ever pulled from an element's dataset. Interactive
-			// shadcn/Base UI components add their own internal `data-*` state
-			// attributes (data-orientation, data-slot, data-value, ...) to the same
-			// element; without an allowlist those would leak into every event.
-			const TRACKED_PARAM_KEYS = [
-				'ctaType',
-				'featureName',
-				'planName',
-				'billingPeriod',
-				'stepId',
-				'autoplayState',
-			];
+      // Only these keys are ever pulled from an element's dataset. Interactive
+      // shadcn/Base UI components add their own internal `data-*` state
+      // attributes (data-orientation, data-slot, data-value, ...) to the same
+      // element; without an allowlist those would leak into every event.
+      const TRACKED_PARAM_KEYS = [
+        "ctaType",
+        "featureName",
+        "planName",
+        "billingPeriod",
+        "stepId",
+        "autoplayState",
+      ];
 
-			document.addEventListener('click', (domEvent) => {
-				const target = (domEvent.target as HTMLElement | null)?.closest<HTMLElement>('[data-event]');
-				if (!target) return;
+      document.addEventListener("click", (domEvent) => {
+        const target = (
+          domEvent.target as HTMLElement | null
+        )?.closest<HTMLElement>("[data-event]");
+        if (!target) return;
 
-				const params: Record<string, string> = {};
-				for (const key of TRACKED_PARAM_KEYS) {
-					if (target.dataset[key] !== undefined) params[key] = target.dataset[key]!;
-				}
+        const params: Record<string, string> = {};
+        for (const key of TRACKED_PARAM_KEYS) {
+          if (target.dataset[key] !== undefined)
+            params[key] = target.dataset[key]!;
+        }
 
-				window.dataLayer.push({ event: target.dataset.event, ...params });
-			});
-		</script>
+        window.dataLayer.push({ event: target.dataset.event, ...params });
+      });
+    </script>
 
-		<script>
-			// Progressive-enhancement scroll reveal for [data-reveal] elements.
-			const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			const revealTargets = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    <script>
+      // Progressive-enhancement scroll reveal for [data-reveal] elements.
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const revealTargets =
+        document.querySelectorAll<HTMLElement>("[data-reveal]");
 
-			if (prefersReducedMotion || !('IntersectionObserver' in window)) {
-				revealTargets.forEach((el) => el.classList.add('is-revealed'));
-			} else {
-				const observer = new IntersectionObserver(
-					(entries) => {
-						for (const entry of entries) {
-							if (entry.isIntersecting) {
-								entry.target.classList.add('is-revealed');
-								observer.unobserve(entry.target);
-							}
-						}
-					},
-					{ threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
-				);
+      if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+        revealTargets.forEach((el) => el.classList.add("is-revealed"));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-revealed");
+                observer.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+        );
 
-				revealTargets.forEach((el) => observer.observe(el));
-			}
-		</script>
-	</body>
+        revealTargets.forEach((el) => observer.observe(el));
+      }
+    </script>
+  </body>
 </html>
