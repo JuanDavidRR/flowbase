@@ -72,6 +72,8 @@ export default function DemoRequestForm() {
   const [values, setValues] = useState<FormValues>(initialValues);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const hasStartedRef = useRef(false);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -107,10 +109,7 @@ export default function DemoRequestForm() {
     setValues((prev) => ({ ...prev, [field]: value }));
   }
 
-  // Placeholder submit handler: there's no backend yet. On success it only
-  // pushes the `form_submit` tracking event and shows a confirmation state.
-  // TODO: replace with a real submission (API route, Zapier, etc.) once one exists.
-  function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const nextErrors = validate(values);
@@ -120,19 +119,34 @@ export default function DemoRequestForm() {
       return;
     }
 
-    pushDataLayerEvent("form_submit", {
-      form_name: "demo_request",
-      company_size: values.companySize,
-      plan_name: selectedPlan ?? undefined,
-    });
+    setSubmitError(null);
+    setIsSubmitting(true);
 
-    console.info(
-      "[Flowbase demo] Form submitted (placeholder, no backend wired up):",
-      values,
-    );
+    try {
+      const response = await fetch("/api/hubspot-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, selectedPlan }),
+      });
 
-    setSubmitted(true);
-    requestAnimationFrame(() => successHeadingRef.current?.focus());
+      if (!response.ok) {
+        throw new Error(`HubSpot submission failed (${response.status})`);
+      }
+
+      pushDataLayerEvent("form_submit", {
+        form_name: "demo_request",
+        company_size: values.companySize,
+        plan_name: selectedPlan ?? undefined,
+      });
+
+      setSubmitted(true);
+      requestAnimationFrame(() => successHeadingRef.current?.focus());
+    } catch (error) {
+      console.error("[Flowbase demo] Failed to send lead to HubSpot:", error);
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -268,8 +282,14 @@ export default function DemoRequestForm() {
         )}
       </div>
 
-      <Button type="submit" className="mt-2 w-full" size="lg">
-        Request a demo
+      {submitError && (
+        <p role="alert" className="text-sm text-destructive">
+          {submitError}
+        </p>
+      )}
+
+      <Button type="submit" className="mt-2 w-full" size="lg" disabled={isSubmitting}>
+        {isSubmitting ? "Sending..." : "Request a demo"}
       </Button>
     </form>
   );
