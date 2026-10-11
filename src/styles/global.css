@@ -161,3 +161,13 @@ body, html {
 #pricing[data-billing-period='annual'] [data-price='monthly'] {
   display: none;
 }
+
+/* A/B test: swap the visible primary CTA label based on the variant assigned
+   client-side in Layout.astro (defaults to "a" until the variant is known). */
+html:not([data-ab-variant='b']) [data-ab-label='b'] {
+  display: none;
+}
+
+html[data-ab-variant='b'] [data-ab-label='a'] {
+  display: none;
+}

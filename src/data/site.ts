@@ -191,6 +191,16 @@ export const journey: JourneyStep[] = [
   },
 ];
 
+// Basic A/B test: swap the primary CTA label. Variant is assigned client-side
+// (see Layout.astro) and the visible span is picked via CSS (see global.css).
+export const experiments = {
+  primaryCta: {
+    id: 'primary_cta_label',
+    a: 'Start free trial',
+    b: 'Get started free',
+  },
+} as const;
+
 export const companySizes = [
   { value: 'solo', label: 'Just me' },
   { value: '2-10', label: '2–10 people' },

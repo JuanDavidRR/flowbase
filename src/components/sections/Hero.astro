@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import { Button } from "@/components/ui/button";
 import Container from "@/components/site/Container.astro";
 import flowbaseImage from "@/assets/images/flowbase.jpg";
+import { experiments } from "@/data/site";
 ---
 
 <section
@@ -52,8 +53,12 @@ import flowbaseImage from "@/assets/images/flowbase.jpg";
           class="cursor-pointer"
           data-event="cta_click"
           data-cta-type="primary"
+          data-ab-experiment={experiments.primaryCta.id}
         >
-          <Button size="lg">Start free trial</Button>
+          <Button size="lg">
+            <span data-ab-label="a">{experiments.primaryCta.a}</span>
+            <span data-ab-label="b">{experiments.primaryCta.b}</span>
+          </Button>
         </a>
         <a
           href="#pricing"

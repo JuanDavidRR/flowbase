@@ -71,6 +71,40 @@ const softwareSchema = {
         sessionStorage.setItem("flowbase:utm", JSON.stringify(utm));
       }
     </script>
+    <script>
+      // Basic A/B test: assign/read the primary-CTA label variant before the
+      // body paints (avoids a flash of the wrong label), persist it so the
+      // same visitor keeps seeing it across sessions, and report the
+      // impression to GA4 via the dataLayer. ?ab_variant=a|b in the URL
+      // forces and re-persists a variant, for QA/demoing.
+      const AB_STORAGE_KEY = "flowbase:abVariant";
+      const forcedVariant = new URLSearchParams(window.location.search).get(
+        "ab_variant",
+      );
+
+      let abVariant;
+      if (forcedVariant === "a" || forcedVariant === "b") {
+        abVariant = forcedVariant;
+        localStorage.setItem(AB_STORAGE_KEY, abVariant);
+      } else {
+        const stored = localStorage.getItem(AB_STORAGE_KEY);
+        if (stored === "a" || stored === "b") {
+          abVariant = stored;
+        } else {
+          abVariant = Math.random() < 0.5 ? "a" : "b";
+          localStorage.setItem(AB_STORAGE_KEY, abVariant);
+        }
+      }
+
+      document.documentElement.setAttribute("data-ab-variant", abVariant);
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: "experiment_impression",
+        ab_experiment: "primary_cta_label",
+        ab_variant: abVariant,
+      });
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -162,8 +196,23 @@ const softwareSchema = {
             params[key] = target.dataset[key]!;
         }
 
-        // agrega lo que necesites directamente aquí
-        params.label = target.textContent?.trim() ?? "";
+        if (target.dataset.abExperiment) {
+          // This CTA renders both label variants in the DOM (CSS picks which
+          // one is visible), so textContent below would otherwise concatenate
+          // both - read only the one matching the assigned variant instead.
+          params.ab_experiment = target.dataset.abExperiment;
+          const abVariant = document.documentElement.dataset.abVariant;
+          if (abVariant) {
+            params.ab_variant = abVariant;
+            params.label =
+              target
+                .querySelector(`[data-ab-label="${abVariant}"]`)
+                ?.textContent?.trim() ?? "";
+          }
+        } else {
+          // agrega lo que necesites directamente aquí
+          params.label = target.textContent?.trim() ?? "";
+        }
 
         window.dataLayer.push({ event: target.dataset.event, ...params });
       });

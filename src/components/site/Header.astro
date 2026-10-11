@@ -1,6 +1,6 @@
 ---
 import { Button } from "@/components/ui/button";
-import { site } from "@/data/site";
+import { site, experiments } from "@/data/site";
 
 const navLinks = [
   { href: "#how-it-works", label: "How it works" },
@@ -52,8 +52,12 @@ const navLinkClass =
         class="cursor-pointer"
         data-event="cta_click"
         data-cta-type="header"
+        data-ab-experiment={experiments.primaryCta.id}
       >
-        <Button size="lg">Start free trial</Button>
+        <Button size="lg">
+          <span data-ab-label="a">{experiments.primaryCta.a}</span>
+          <span data-ab-label="b">{experiments.primaryCta.b}</span>
+        </Button>
       </a>
     </div>
 
@@ -87,8 +91,12 @@ const navLinkClass =
         <Button
           className="mt-4 w-full"
           data-event="cta_click"
-          data-cta-type="header">Start free trial</Button
+          data-cta-type="header"
+          data-ab-experiment={experiments.primaryCta.id}
         >
+          <span data-ab-label="a">{experiments.primaryCta.a}</span>
+          <span data-ab-label="b">{experiments.primaryCta.b}</span>
+        </Button>
       </div>
     </details>
   </div>
