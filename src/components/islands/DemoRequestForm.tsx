@@ -20,6 +20,13 @@ import {
 import { companySizes } from "@/data/site";
 
 const SELECTED_PLAN_STORAGE_KEY = "flowbase:selectedPlan";
+const UTM_STORAGE_KEY = "flowbase:utm";
+
+type UtmParams = {
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
+};
 
 type FormValues = {
   name: string;
@@ -77,6 +84,11 @@ export default function DemoRequestForm() {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const hasStartedRef = useRef(false);
   const successHeadingRef = useRef<HTMLHeadingElement>(null);
+  const utmRef = useRef<UtmParams>({
+    utm_source: null,
+    utm_medium: null,
+    utm_campaign: null,
+  });
 
   // Picks up the plan chosen on the pricing section: sessionStorage covers
   // this island mounting after the click (client:visible), the custom event
@@ -84,6 +96,17 @@ export default function DemoRequestForm() {
   useEffect(() => {
     const stored = sessionStorage.getItem(SELECTED_PLAN_STORAGE_KEY);
     if (stored) setSelectedPlan(stored);
+
+    // UTM params captured on page load (see Layout.astro) - read once, no
+    // re-render needed since they're only used at submit time.
+    const storedUtm = sessionStorage.getItem(UTM_STORAGE_KEY);
+    if (storedUtm) {
+      try {
+        utmRef.current = JSON.parse(storedUtm);
+      } catch {
+        // Ignore malformed storage - submits without UTM data.
+      }
+    }
 
     function handlePlanSelected(event: Event) {
       const planName = (event as CustomEvent<{ planName: string }>).detail
@@ -126,7 +149,11 @@ export default function DemoRequestForm() {
       const response = await fetch("/api/hubspot-lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...values, selectedPlan }),
+        body: JSON.stringify({
+          ...values,
+          selectedPlan,
+          ...utmRef.current,
+        }),
       });
 
       if (!response.ok) {

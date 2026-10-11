@@ -39,6 +39,9 @@ export default async function handler(request, response) {
   if (lastname) properties.lastname = lastname;
   if (body.company) properties.company = body.company;
   if (body.companySize) properties.company_size = body.companySize;
+  if (body.utm_source) properties.utm_source = body.utm_source;
+  if (body.utm_medium) properties.utm_medium = body.utm_medium;
+  if (body.utm_campaign) properties.utm_campaign = body.utm_campaign;
   properties.plan_interest =
     (typeof body.selectedPlan === "string" && body.selectedPlan.trim()) ||
     "No plan selected";

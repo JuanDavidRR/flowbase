@@ -53,6 +53,24 @@ const softwareSchema = {
       })(window, document, "script", "dataLayer", "GTM-5GWNPPMP");
     </script>
     <!-- End Google Tag Manager -->
+    <script>
+      // Captures utm_source/medium/campaign off the landing URL into
+      // sessionStorage so the demo form can attach them even if the visitor
+      // scrolls to it well after arriving. Only overwrites the stored value
+      // when the current URL actually carries UTM params, so a later
+      // in-session navigation without them doesn't erase the original
+      // attribution (first-touch-per-session).
+      const utmParams = new URLSearchParams(window.location.search);
+      const utm = {
+        utm_source: utmParams.get("utm_source"),
+        utm_medium: utmParams.get("utm_medium"),
+        utm_campaign: utmParams.get("utm_campaign"),
+      };
+
+      if (Object.values(utm).some(Boolean)) {
+        sessionStorage.setItem("flowbase:utm", JSON.stringify(utm));
+      }
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
