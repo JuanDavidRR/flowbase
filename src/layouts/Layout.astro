@@ -190,7 +190,7 @@ const softwareSchema = {
         )?.closest<HTMLElement>("[data-event]");
         if (!target) return;
 
-        const params: Record<string, string> = {};
+        const params: Record<string, string | undefined> = {};
         for (const key of TRACKED_PARAM_KEYS) {
           if (target.dataset[key] !== undefined)
             params[key] = target.dataset[key]!;
@@ -212,6 +212,19 @@ const softwareSchema = {
         } else {
           // agrega lo que necesites directamente aquí
           params.label = target.textContent?.trim() ?? "";
+
+          // The dataLayer is cumulative, not scoped per push: GTM's Data
+          // Layer Variables resolve against the whole merged dataLayer
+          // state, not just the keys in the push that triggered them. The
+          // page-load "experiment_impression" event (or an earlier click on
+          // an experiment-tagged CTA) already set ab_experiment/ab_variant,
+          // and they'd otherwise keep reading as "set" on every later click
+          // that has nothing to do with the experiment. Explicitly clear
+          // them so a GA4 tag mapped to these keys doesn't report an
+          // experiment on clicks (e.g. the secondary "Pricing" CTA) that
+          // were never part of it.
+          params.ab_experiment = undefined;
+          params.ab_variant = undefined;
         }
 
         window.dataLayer.push({ event: target.dataset.event, ...params });
